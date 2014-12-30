@@ -1,41 +1,16 @@
 /*************************************************************************
     > File Name: classHuffmanTree.cpp
     > Author: VOID_133
-    > ################### 
-    > Mail: ################### 
+    > ###################
+    > Mail: ###################
     > Created Time: 2014年12月29日 星期一 19时35分05秒
-	> Content : Define the HuffmanTree Class 
+    > Content : Define the HuffmanTree Class
  ************************************************************************/
-#ifndef _CLASSHUFFMANTREE_CPP
-#define _CLASSHUFFMANTREE_CPP
-#include "structs.h"
-#include "comm.h"
-class HuffmanTree{
-	private:
-		void createHuffmanTree();
-		void countFreq();
-		void generateCodingTable();
-		void pr_encoding();
-		void pr_decoding();
-		int root;
-		vector<StaticHuffmanNode> HuffmanT;
-		string codingTable[300];
-		string fileStr;
-	public:
-		void encoding();
-		void decoding();
-		void open();
-		HuffmanTree();
-		~HuffmanTree();
-		HuffmanTree(const HuffmanTree& T);
-		
-		//******For Debug********
-		//Delete when the project Done
-#ifdef DEBUG
-		void debug();
-#endif
-		//******END FOR DEBUG****
-};
+#ifndef CLASSHUFFMANTREE_CPP
+#define CLASSHUFFMANTREE_CPP
+#include "classHuffmanTree.h"
+
+using namespace std;
 
 void HuffmanTree::encoding()
 {
@@ -44,13 +19,46 @@ void HuffmanTree::encoding()
 
 void HuffmanTree::decoding()
 {
-	//open
+
 }
 
-void open()
+Status HuffmanTree::open(const string& addr)
+{
+	//Open with fstream
+	ifstream fs(addr.c_str());
+	if(fs.is_open())
+	{
+		char ch;
+		while(fs.good())
+		{
+			fs.get(ch);
+			fileStr+=ch;
+		}
+		fs.close();
+	}
+	else
+	{
+		return ERR;
+	}
+
+	//Output the File
+	return OK;
+}
+
+void HuffmanTree::debug()
+{
+
+	return ;
+}
+
+HuffmanTree::HuffmanTree():fileStr("")
+{
+	
+}
+
+HuffmanTree::~HuffmanTree()
 {
 
 }
-
 
 #endif
