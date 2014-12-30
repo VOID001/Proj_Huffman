@@ -8,6 +8,7 @@
  ************************************************************************/
 #ifndef SAFE_HANDLER_COMM_H
 #define SAFE_HANDLER_COMM_H
+
 #include<iostream>
 #include<fstream>
 #include<sstream>
@@ -22,5 +23,5 @@
 #include<cstdlib>
 #include<ctime>
 #include<set>
-#endif
 
+#endif
