@@ -3,16 +3,18 @@
 #include"comm.h"
 using namespace std;
 
+
 class HuffmanTree{
 private:
 	void createHuffmanTree();
-	void countFreq();
+	Status countFreq();
 	void generateCodingTable();
 	void pr_encoding();
 	void pr_decoding();
 	int root;
 	vector<StaticHuffmanNode> HuffmanT;
-	string codingTable[300];
+	//string codingTable[300];
+	charNode charFreq[300];
 	string fileStr;
 public:
 	void encoding();

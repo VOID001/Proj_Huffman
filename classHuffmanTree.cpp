@@ -45,9 +45,29 @@ Status HuffmanTree::open(const string& addr)
 	return OK;
 }
 
+Status HuffmanTree::countFreq()
+{
+	memset(charFreq,0,sizeof(charFreq));
+	long long len=fileStr.length();
+	for(long long i=0;i<len;i++)
+	{
+		charFreq[(int)fileStr[i]].freq++;
+	}
+	//Debug
+	//for(int i=0;i<300;i++)
+	//{
+	//	if(charFreq[i].freq)
+	//	{
+	//		printf("%c=%d\n",i,charFreq[i].freq);
+	//	}
+	//}
+	//End Debug
+	return OK;
+}
+
 void HuffmanTree::debug()
 {
-
+	countFreq();
 	return ;
 }
 
