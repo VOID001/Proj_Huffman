@@ -21,4 +21,13 @@ typedef struct nodea{
 	int addr;
 }charNode;
 
+//@usage: template for priority queue
+//
+struct cmp{
+	bool operator() (const charNode& a,const charNode& b)
+	{
+		return a.freq<b.freq;
+	}
+};
+
 #endif

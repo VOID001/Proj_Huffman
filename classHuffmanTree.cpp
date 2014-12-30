@@ -45,6 +45,58 @@ Status HuffmanTree::open(const string& addr)
 	return OK;
 }
 
+Status HuffmanTree::createHuffmanTree()
+{
+	//create a priority queue
+	//and push all the elem used into it
+	priority_queue<charNode,vector<charNode>,cmp> pq;
+	StaticHuffmanNode hfnode;
+	for(int i=0;i<charNodeSize;i++)
+	{
+		if(charFreq[i].freq)
+		{
+			hfnode.left=hfnode.right=-1;
+			hfnode.data=i;
+			charFreq[i].addr=HuffmanT.size();
+			HuffmanT.push_back(hfnode);
+			pq.push(charFreq[i]);
+		}
+	}
+	while(!pq.empty())
+	{
+		charNode tmpa,tmpb,tmpc;
+		tmpa=pq.top();
+		pq.pop();
+		if(pq.empty())			//what if there is only one character
+		{
+			//return ERR;
+		}
+		else
+		{
+			tmpb=pq.top();
+			pq.pop();
+			int tmpaddr=addNode(tmpa.addr,tmpb.addr);
+			tmpc.freq=tmpa.freq+tmpb.freq;
+			tmpc.addr=tmpaddr;
+			pq.push(tmpc);
+		}
+	}
+	root=HuffmanT.size()-1;
+	return OK;
+}
+
+int HuffmanTree::addNode(int laddr,int raddr)
+{
+	StaticHuffmanNode hfnode;
+	hfnode.left=laddr;
+	hfnode.right=raddr;
+	hfnode.data='#';
+	int pos=HuffmanT.size();
+	HuffmanT.push_back(hfnode);
+	
+	return pos;
+}
+
 Status HuffmanTree::countFreq()
 {
 	memset(charFreq,0,sizeof(charFreq));
@@ -54,7 +106,7 @@ Status HuffmanTree::countFreq()
 		charFreq[(int)fileStr[i]].freq++;
 	}
 	//Debug
-	//for(int i=0;i<300;i++)
+	//for(int i=0;i<charNodeSize;i++)
 	//{
 	//	if(charFreq[i].freq)
 	//	{
@@ -68,6 +120,7 @@ Status HuffmanTree::countFreq()
 void HuffmanTree::debug()
 {
 	countFreq();
+	createHuffmanTree();
 	return ;
 }
 

@@ -27,5 +27,6 @@
 
 #define DEBUG
 typedef enum {OK,ERR} Status;
+const int charNodeSize=300;
 
 #endif

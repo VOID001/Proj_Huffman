@@ -6,7 +6,8 @@ using namespace std;
 
 class HuffmanTree{
 private:
-	void createHuffmanTree();
+	int addNode(int laddr,int raddr);
+	Status createHuffmanTree();
 	Status countFreq();
 	void generateCodingTable();
 	void pr_encoding();
@@ -14,7 +15,7 @@ private:
 	int root;
 	vector<StaticHuffmanNode> HuffmanT;
 	//string codingTable[300];
-	charNode charFreq[300];
+	charNode charFreq[charNodeSize];
 	string fileStr;
 public:
 	void encoding();
