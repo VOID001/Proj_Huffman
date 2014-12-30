@@ -1,0 +1,8 @@
+# Projects
+*.pro
+*.ui
+*.user
+docs/
+tags
+
+
