@@ -85,6 +85,26 @@ Status HuffmanTree::createHuffmanTree()
 	return OK;
 }
 
+Status HuffmanTree::generateCodingTable()
+{
+	string encodingStr="";
+	recur_gen_table(root,encodingStr);
+}
+
+void HuffmanTree::recur_gen_table(int root,string encodingStr)
+{
+	if(HuffmanT[root].left==HuffmanT[root].right && HuffmanT[root].left==-1)
+	{
+		codingTable[HuffmanT[root].data]=encodingStr;
+		return ;
+	}
+	else
+	{
+		recur_gen_table(HuffmanT[root].left,encodingStr+'0');
+		recur_gen_table(HuffmanT[root].right,encodingStr+'1');
+	}
+}
+
 int HuffmanTree::addNode(int laddr,int raddr)
 {
 	StaticHuffmanNode hfnode;
@@ -121,6 +141,7 @@ void HuffmanTree::debug()
 {
 	countFreq();
 	createHuffmanTree();
+	generateCodingTable();
 	return ;
 }
 

@@ -9,12 +9,13 @@ private:
 	int addNode(int laddr,int raddr);
 	Status createHuffmanTree();
 	Status countFreq();
-	void generateCodingTable();
+	Status generateCodingTable();
+	void recur_gen_table(int root,string encodigStr);
 	void pr_encoding();
 	void pr_decoding();
 	int root;
 	vector<StaticHuffmanNode> HuffmanT;
-	//string codingTable[300];
+	string codingTable[charNodeSize];
 	charNode charFreq[charNodeSize];
 	string fileStr;
 public:

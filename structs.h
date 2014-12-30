@@ -26,7 +26,7 @@ typedef struct nodea{
 struct cmp{
 	bool operator() (const charNode& a,const charNode& b)
 	{
-		return a.freq<b.freq;
+		return a.freq>b.freq;				//this means the smaller one will pop out first
 	}
 };
 
