@@ -19,6 +19,6 @@ typedef struct node{
 typedef struct nodea{
 	long long freq;
 	int addr;
-}CodingTable;
+}charNode;
 
 #endif
