@@ -13,14 +13,16 @@ private:
 	void recur_gen_table(int root,string encodigStr);
 	void pr_encoding();
 	void pr_decoding();
+	Status pr_compress(const string& fileName);
+	void pr_extract();
 	int root;
 	vector<StaticHuffmanNode> HuffmanT;
 	string codingTable[charNodeSize];
 	charNode charFreq[charNodeSize];
 	string fileStr;
 public:
-	void encoding();
-	void decoding();
+	void compress(const string& fileName);
+	void extract();
 	Status open(const string& addr);
 	HuffmanTree();
 	~HuffmanTree();
