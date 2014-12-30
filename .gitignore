@@ -4,5 +4,5 @@
 *.user
 docs/
 tags
-
+*.in
 
