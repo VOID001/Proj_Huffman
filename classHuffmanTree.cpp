@@ -48,7 +48,7 @@ Status HuffmanTree::pr_compress(const string& fileName)
 			int encodeLen=tmpcodestr.length();
 			for(int j=0;j<encodeLen;j++)
 			{
-				if(head==7)
+				if(head==8)
 				{
 					of.put(ch);
 					head=0;
@@ -57,19 +57,20 @@ Status HuffmanTree::pr_compress(const string& fileName)
 				if(tmpcodestr[j]=='0')
 				{
 					ch|=0;
-					ch<<=1;
+					if(head!=7) ch<<=1;
 					head++;
 				}
 				else if(tmpcodestr[j]=='1')
 				{
 					ch|=1;
-					ch<<=1;
+					if(head!=7) ch<<=1;
 					head++;
 				}
 			}
 		}
 		if(ch)
 		{
+			ch<<=(7-head);
 			of.put(ch);
 		}
 		of.close();
