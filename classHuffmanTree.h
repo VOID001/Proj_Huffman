@@ -6,6 +6,12 @@ using namespace std;
 
 class HuffmanTree{
 private:
+	vector<StaticHuffmanNode> HuffmanT;
+	string codingTable[charNodeSize];
+	charNode charFreq[charNodeSize];
+	string fileStr;
+	int root;
+	
 	int addNode(int laddr,int raddr);
 	Status createHuffmanTree();
 	Status countFreq();
@@ -14,15 +20,12 @@ private:
 	void pr_encoding();
 	void pr_decoding();
 	Status pr_compress(const string& fileName);
-	void pr_extract();
-	int root;
-	vector<StaticHuffmanNode> HuffmanT;
-	string codingTable[charNodeSize];
-	charNode charFreq[charNodeSize];
-	string fileStr;
+	Status pr_extract(const string& fileName);
+	Status readTreefromFile(const string& treeName);
+	Status readHuffFile(const string& fileName);
 public:
 	void compress(const string& fileName);
-	void extract();
+	void extract(const string& fileName,const string& treeName);
 	Status open(const string& addr);
 	HuffmanTree();
 	~HuffmanTree();

@@ -14,19 +14,28 @@ using namespace std;
 
 void HuffmanTree::compress(const string& fileName)
 {
+	open(fileName);
+	countFreq();
+	createHuffmanTree();
+	generateCodingTable();
 	pr_compress(fileName);
+	fileStr.clear();
 }
 
-void HuffmanTree::extract()
+void HuffmanTree::extract(const string& fileName,const string& treeName)
 {
-
+	HuffmanT.clear();
+	//Clear codingTable;
+	readTreefromFile(treeName);
+	open(fileName);
+	pr_extract("extract");
 }
 
 Status HuffmanTree::pr_compress(const string& fileName)
 {
 	//Open the output File
 	string newName=fileName+".huff";
-	ofstream of(newName.c_str());
+	ofstream of(newName.c_str(),ios_base::binary);			//use binary IO
 	if(of)
 	{
 		//Compress the Tree
@@ -35,7 +44,7 @@ Status HuffmanTree::pr_compress(const string& fileName)
 		int fileStrlen=fileStr.length();
 		for(long long i=0;i<fileStrlen;i++)
 		{
-			string tmpcodestr=codingTable[(int)fileStr[i]];
+			string tmpcodestr=codingTable[fileStr[i]+128];
 			int encodeLen=tmpcodestr.length();
 			for(int j=0;j<encodeLen;j++)
 			{
@@ -69,7 +78,7 @@ Status HuffmanTree::pr_compress(const string& fileName)
 		//then to file
 		//StaticHuffmanNode *tmpHuffT=new StaticHuffmanNode[1500];
 		//int* ptest=new int[root];
-		StaticHuffmanNode tmpHuffT[1000];
+		StaticHuffmanNode tmpHuffT[treeLength];
 		memset(tmpHuffT,0,sizeof(tmpHuffT));
 		printf("%d\n",sizeof(tmpHuffT));
 		int counter=0;
@@ -78,10 +87,12 @@ Status HuffmanTree::pr_compress(const string& fileName)
 			tmpHuffT[counter]=*si;
 			counter++;
 		}
+		tmpHuffT[treeLength-1].data=root;
+		tmpHuffT[treeLength-1].left=tmpHuffT[treeLength-1].right=root;
 		newName=fileName+".treetable";
 		FILE *ofp;
-		ofp=fopen(newName.c_str(),"w");
-		fwrite(tmpHuffT,sizeof(StaticHuffmanNode),1000,ofp);
+		ofp=fopen(newName.c_str(),"wb");			//use binary IO
+		fwrite(tmpHuffT,sizeof(StaticHuffmanNode),treeLength,ofp);
 		fclose(ofp);
 		//of.open(newName.c_str());
 		//of.write(tmpHuffT,counter-1);
@@ -96,17 +107,60 @@ Status HuffmanTree::pr_compress(const string& fileName)
 
 }
 
+Status HuffmanTree::pr_extract(const string& fileName)
+{
+	char ch=0;
+	int ptr=root;
+	int head=0;
+	char chmask=0x80;			//binary mode 1000 0000
+	long long len=fileStr.length();
+	ofstream of(fileName.c_str(),ios_base::binary);
+	if(of)
+	{
+		for(long long i=0;i<len;i++)
+		{
+			ch=fileStr[i];
+			head=0;
+			while(head<=7)
+			{
+				if(HuffmanT[ptr].left==HuffmanT[ptr].right && HuffmanT[ptr].left==-1)
+				{
+					of.put(char(HuffmanT[ptr].data-128));
+					ptr=root;
+				}
+				if(ch&chmask)
+				{
+					ptr=HuffmanT[ptr].right;
+				}
+				else
+				{
+					ptr=HuffmanT[ptr].left;
+				}
+				ch<<=1;
+				head++;
+			}
+		}
+		of.close();
+		return OK;
+	}
+	else
+	{
+		return ERR;
+	}
+}
+
 Status HuffmanTree::open(const string& addr)
 {
 	//Open with fstream
 
-	ifstream fs(addr.c_str());
+	ifstream fs(addr.c_str(),ios_base::binary);		//use binary IO
 	if(fs.is_open())
 	{
-		char ch;
-		while(fs.good())
+		char ch;									//Some char in binary files exclude the size of char How to deal with it ??????
+		while(fs.peek()!=EOF)
 		{
 			fs.get(ch);
+			//printf("%5d\t",ch);
 			fileStr+=ch;
 		}
 		fs.close();
@@ -171,7 +225,9 @@ void HuffmanTree::recur_gen_table(int root,string encodingStr)
 {
 	if(HuffmanT[root].left==HuffmanT[root].right && HuffmanT[root].left==-1)
 	{
-		codingTable[(int)HuffmanT[root].data]=encodingStr;
+		int tmpid=HuffmanT[root].data<0?HuffmanT[root].data+256:HuffmanT[root].data;
+		//codingTable[HuffmanT[root].data]=encodingStr;
+		codingTable[tmpid]=encodingStr;
 		return ;
 	}
 	else
@@ -199,14 +255,15 @@ Status HuffmanTree::countFreq()
 	long long len=fileStr.length();
 	for(long long i=0;i<len;i++)
 	{
-		charFreq[(int)fileStr[i]].freq++;
+		//charFreq[fileStr[i]].freq++;		//??fileStr[i] maybe a negative number
+		charFreq[fileStr[i]+128].freq++;		//??fileStr[i] maybe a negative number ,add 128 to the val so it will be positive
 	}
 	//Debug
 	for(int i=0;i<charNodeSize;i++)
 	{
 		if(charFreq[i].freq)
 		{
-			printf("%c=%d\n",i,charFreq[i].freq);
+			printf("%c(%d)=%d\n",i-128,i,charFreq[i].freq);
 		}
 	}
 	//End Debug
@@ -214,12 +271,34 @@ Status HuffmanTree::countFreq()
 }
 
 
+Status HuffmanTree::readTreefromFile(const string& treeName)
+{
+	FILE* fp=NULL;
+	fp=fopen(treeName.c_str(),"rb");
+	if(!fp)
+	{
+		return ERR;
+	}
+	else
+	{
+		StaticHuffmanNode tmpHuffT[treeLength];
+		fread(tmpHuffT,sizeof(StaticHuffmanNode),treeLength,fp);
+		fclose(fp);
+
+		for(int i=0;i<treeLength;i++)
+		{
+			HuffmanT.push_back(tmpHuffT[i]);
+		}
+		root=tmpHuffT[treeLength-1].right;
+	}
+
+}
+
+
 void HuffmanTree::debug()
 {
-	countFreq();
-	createHuffmanTree();
-	generateCodingTable();
 	compress("test.in");
+	extract("test.in.huff","test.in.treetable");
 	return ;
 }
 

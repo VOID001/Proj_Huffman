@@ -13,7 +13,8 @@
 typedef struct node{
 	int left;
 	int right;
-	char data;
+	//char data;
+	int data;
 }StaticHuffmanNode;
 
 typedef struct nodea{
