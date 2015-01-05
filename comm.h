@@ -24,9 +24,11 @@
 #include<ctime>
 #include<set>
 #include "structs.h"
+#include<QObject>
 
 #define DEBUG
 typedef enum {OK,ERR} Status;
+#define IIF(a) if(a==ERR) return ERR
 const int charNodeSize=300;
 const int treeLength=1000;
 

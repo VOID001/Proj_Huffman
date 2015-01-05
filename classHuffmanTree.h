@@ -4,7 +4,7 @@
 using namespace std;
 
 
-class HuffmanTree{
+class HuffmanTree/*:public QObject*/{
 private:
 	vector<StaticHuffmanNode> HuffmanT;
 	string codingTable[charNodeSize];
@@ -24,8 +24,8 @@ private:
 	Status readTreefromFile(const string& treeName);
 	Status readHuffFile(const string& fileName);
 public:
-	void compress(const string& fileName);
-	void extract(const string& fileName,const string& treeName);
+	Status compress(const string& fileName);
+	Status extract(const string& fileName,const string& treeName,const string& destName);
 	Status open(const string& addr);
 	HuffmanTree();
 	~HuffmanTree();

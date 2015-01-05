@@ -12,29 +12,30 @@
 
 using namespace std;
 
-void HuffmanTree::compress(const string& fileName)
+Status HuffmanTree::compress(const string& fileName)
 {
-	open(fileName);
-	countFreq();
-	createHuffmanTree();
-	generateCodingTable();
-	pr_compress(fileName);
+	IIF(open(fileName));
+	IIF(countFreq());
+	IIF(createHuffmanTree());
+	IIF(generateCodingTable());
+	IIF(pr_compress(fileName));
 	fileStr.clear();
+	return OK;
 }
 
-void HuffmanTree::extract(const string& fileName,const string& treeName)
+Status HuffmanTree::extract(const string& fileName,const string& treeName,const string& destName)
 {
 	HuffmanT.clear();
 	//Clear codingTable;
 	readTreefromFile(treeName);
 	open(fileName);
-	pr_extract("extract");
+	pr_extract(destName);
 }
 
 Status HuffmanTree::pr_compress(const string& fileName)
 {
 	//Open the output File
-	string newName=fileName+".huff";
+	string newName=fileName;
 	ofstream of(newName.c_str(),ios_base::binary);			//use binary IO
 	if(of)
 	{

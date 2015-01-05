@@ -2,13 +2,18 @@
 #include "classHuffmanTree.h"
 #include<iostream>
 #include<string>
+#include<QApplication>
+#include"mainwindow.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+	QApplication desktopApp(argc,argv);
 	HuffmanTree htree;
-	htree.debug();
+	mainWindow mainw;
+	mainw.show();
+	//htree.debug();
 	/*ofstream of("text_output",ios_base::binary);
 	ifstream ifs("test.in",ios_base::binary);
 	char ch;
@@ -27,5 +32,6 @@ int main(int argc, char *argv[])
 	}
 	of.close();
 	ifs.close();*/
+	return desktopApp.exec();
 	return 0;
 }
