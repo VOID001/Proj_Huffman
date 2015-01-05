@@ -26,7 +26,7 @@
 #include "structs.h"
 #include<QObject>
 
-#define DEBUG
+//#define DEBUG
 typedef enum {OK,ERR} Status;
 #define IIF(a) if(a==ERR) return ERR
 const int charNodeSize=300;

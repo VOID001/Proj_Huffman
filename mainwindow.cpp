@@ -54,6 +54,18 @@ void mainWindow::extractFile()
 {
 	HuffmanTree HT;
 	QString qhuff=txtHuff->text();
+	QString qtree=txtTree->text();
+	QString qsave=QFileDialog::getSaveFileName(this,"Select the place to save File","./","allFiles(*)");
+	int flag=HT.extract(qhuff.toStdString(),qtree.toStdString(),qsave.toStdString());
+	if(flag==OK)
+	{
+		lblStatus->setText("<font color=green>Extract OK!</font>");
+	}
+	else
+	{
+		lblStatus->setText("<font color=red>Extract Failed!</font>");
+	}
+	return ;
 }
 
 void mainWindow::enableCompressBtn(const QString& qs)
@@ -95,7 +107,7 @@ void mainWindow::setTreeName(const QString& qs)
 
 void mainWindow::openFile()
 {
-	QString strFile=QFileDialog::getOpenFileName(this,"Select The File to Compress","./","allFiles(*.*)");
+	QString strFile=QFileDialog::getOpenFileName(this,"Select The File to Compress","./","allFiles(*)");
 	txtToCompress->setText(strFile);
 }
 
@@ -103,4 +115,9 @@ void mainWindow::on_btnHuffSel_clicked()
 {
 	QString strFile=QFileDialog::getOpenFileName(this,"Select The File to Extract","./","voidHuffFiles(*.huff)");
 	txtHuff->setText(strFile);
+}
+
+void mainWindow::on_btnCompress_clicked()
+{
+    
 }

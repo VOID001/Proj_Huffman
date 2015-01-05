@@ -27,9 +27,10 @@ Status HuffmanTree::extract(const string& fileName,const string& treeName,const 
 {
 	HuffmanT.clear();
 	//Clear codingTable;
-	readTreefromFile(treeName);
-	open(fileName);
-	pr_extract(destName);
+	IIF(readTreefromFile(treeName));
+	IIF(open(fileName));
+	IIF(pr_extract(destName));
+	return OK;
 }
 
 Status HuffmanTree::pr_compress(const string& fileName)
@@ -82,7 +83,9 @@ Status HuffmanTree::pr_compress(const string& fileName)
 		//int* ptest=new int[root];
 		StaticHuffmanNode tmpHuffT[treeLength];
 		memset(tmpHuffT,0,sizeof(tmpHuffT));
+		#ifdef DEBUG
 		printf("%d\n",sizeof(tmpHuffT));
+		#endif
 		int counter=0;
 		for(vector<StaticHuffmanNode>::iterator si=HuffmanT.begin();si!=HuffmanT.end();si++)
 		{
@@ -98,8 +101,9 @@ Status HuffmanTree::pr_compress(const string& fileName)
 		fclose(ofp);
 		//of.open(newName.c_str());
 		//of.write(tmpHuffT,counter-1);
-		
+		#ifdef DEBUG
 		printf("OK");
+		#endif
 		return OK;
 	}
 	else
@@ -261,6 +265,7 @@ Status HuffmanTree::countFreq()
 		charFreq[fileStr[i]+128].freq++;		//??fileStr[i] maybe a negative number ,add 128 to the val so it will be positive
 	}
 	//Debug
+	#ifdef DEBUG
 	for(int i=0;i<charNodeSize;i++)
 	{
 		if(charFreq[i].freq)
@@ -268,6 +273,7 @@ Status HuffmanTree::countFreq()
 			printf("%c(%d)=%d\n",i-128,i,charFreq[i].freq);
 		}
 	}
+	#endif
 	//End Debug
 	return OK;
 }
@@ -293,16 +299,17 @@ Status HuffmanTree::readTreefromFile(const string& treeName)
 		}
 		root=tmpHuffT[treeLength-1].right;
 	}
-
+	return OK;
 }
 
-
+#ifdef DEBUG
 void HuffmanTree::debug()
 {
 	compress("test.in");
 	extract("test.in.huff","test.in.treetable");
 	return ;
 }
+#endif
 
 HuffmanTree::HuffmanTree():fileStr("")
 {
