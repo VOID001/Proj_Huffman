@@ -31,7 +31,7 @@ mainWindow::mainWindow()
 	connect(txtTree,SIGNAL(textChanged(QString)),this,SLOT(enableExtractBtn()));
 	connect(txtHuff,SIGNAL(textChanged(const QString&)),this,SLOT(setTreeName(const QString&)));
 	connect(btnFileSel,SIGNAL(clicked()),this,SLOT(openFile()));
-	
+	setFixedSize(this->width(),this->height());
 }
 
 void mainWindow::compressFile()
